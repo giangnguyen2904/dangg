@@ -4,100 +4,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dangg | Portfolio</title>
+  <title>Dangg | Documentation</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <div class="app-container">
-    <!-- Activity Bar (Leftmost icons) -->
-    <aside class="activity-bar">
-      <div class="activity-icon active"><i class="far fa-copy"></i></div>
-      <div class="activity-icon"><i class="fas fa-search"></i></div>
-      <div class="activity-icon"><i class="fas fa-code-branch"></i></div>
-      <div class="activity-icon"><i class="far fa-envelope"></i></div>
-      <div class="activity-icon bottom"><i class="fas fa-cog"></i></div>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="navbar-brand">
+      <i class="fas fa-book-reader"></i>
+      <span>Dangg Docs</span>
+    </div>
+    <div class="navbar-links">
+      <a href="https://github.com/giangnguyen2904/dangg" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+    </div>
+    <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+  </header>
+
+  <div class="main-container">
+    <!-- Sidebar Navigation -->
+    <aside class="doc-sidebar">
+      <nav class="nav-tree">
+
+        <div class="nav-group">
+          <div class="nav-group-title">Introduction</div>
+          <a href="#" class="nav-link active" data-file="home.html">Welcome</a>
+          <a href="#" class="nav-link" data-file="about.css">About Me</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-title">Projects</div>
+          <a href="#" class="nav-link" data-file="skills.js">Skills</a>
+          <a href="#" class="nav-link" data-file="projects.md">My Projects</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-title">WWM Tools</div>
+          <a href="#" class="nav-link" data-file="introduction.md">Overview</a>
+          <a href="#" class="nav-link" data-file="downloads.json">Downloads</a>
+          <a href="#" class="nav-link" data-file="guides.js">Guides</a>
+        </div>
+
+      </nav>
     </aside>
 
-    <!-- Sidebar (File Explorer) -->
-    <nav class="sidebar">
-      <div class="sidebar-header">EXPLORER</div>
-      <div class="file-tree">
-        <!-- Portfolio Folder -->
-        <div class="tree-item folder open">
-          <div class="item-row"><i class="fas fa-chevron-down"></i> <span class="folder-name">PORTFOLIO</span></div>
-          <div class="tree-children">
-            <div class="tree-item file active" data-file="home.html">
-              <div class="item-row"><i class="fab fa-html5 text-orange"></i> <span>home.html</span></div>
-            </div>
-            <div class="tree-item file" data-file="skills.js">
-              <div class="item-row"><i class="fab fa-js text-yellow"></i> <span>skills.js</span></div>
-            </div>
-            <div class="tree-item file" data-file="projects.md">
-              <div class="item-row"><i class="fab fa-markdown text-blue-light"></i> <span>projects.md</span></div>
-            </div>
-            <div class="tree-item file" data-file="contact.json">
-              <div class="item-row"><i class="fas fa-brackets-curly text-green"></i> <span>contact.json</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- WWM Tools Folder -->
-        <div class="tree-item folder">
-          <div class="item-row"><i class="fas fa-chevron-right"></i> <span class="folder-name">WWM-TOOLS</span></div>
-          <div class="tree-children">
-            <div class="tree-item file" data-file="introduction.md">
-              <div class="item-row"><i class="fab fa-markdown text-blue-light"></i> <span>introduction.md</span></div>
-            </div>
-            <div class="tree-item file" data-file="downloads.json">
-              <div class="item-row"><i class="fas fa-download text-green"></i> <span>downloads.json</span></div>
-            </div>
-            <div class="tree-item file" data-file="guides.js">
-              <div class="item-row"><i class="fab fa-js text-yellow"></i> <span>guides.js</span></div>
-            </div>
-          </div>
+    <!-- Main Content Area -->
+    <main class="doc-content">
+      <div class="content-wrapper">
+        <div id="content-display">
+          <!-- Dynamic Content -->
         </div>
       </div>
-    </nav>
-
-    <!-- Main Editor Area -->
-    <main class="editor-area">
-      <!-- Tabs -->
-      <div class="editor-tabs">
-        <div class="tab active" data-file="home.html">
-          <i class="fab fa-html5 text-orange"></i>
-          <span>home.html</span>
-          <i class="fas fa-times close-tab"></i>
-        </div>
-        <!-- Other tabs will be dynamically added here -->
-      </div>
-
-      <!-- Code Content / Page Content -->
-      <div class="code-container">
-        <div class="line-numbers">
-          <!-- Line numbers generated by JS -->
-        </div>
-        <div class="code-content" id="content-display">
-          <!-- Dynamic Content Loaded Here -->
-        </div>
-      </div>
+      <footer class="doc-footer">
+        <p>&copy; 2026 Giang Nguyen. Built with <i class="fas fa-heart"></i></p>
+      </footer>
     </main>
-
-    <!-- Status Bar -->
-    <footer class="status-bar">
-      <div class="status-left">
-        <div class="status-item"><i class="fas fa-code-branch"></i> main*</div>
-        <div class="status-item"><i class="far fa-times-circle"></i> 0</div>
-        <div class="status-item"><i class="fas fa-exclamation-triangle"></i> 0</div>
-      </div>
-      <div class="status-right">
-        <div class="status-item">Ln 1, Col 1</div>
-        <div class="status-item">UTF-8</div>
-        <div class="status-item">HTML</div>
-        <div class="status-item"><i class="far fa-bell"></i></div>
-      </div>
-    </footer>
   </div>
 
   <script src="data.js"></script>

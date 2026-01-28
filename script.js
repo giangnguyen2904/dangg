@@ -1,121 +1,70 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // Select all file items (will pick up new ones from HTML)
-    const fileItems = document.querySelectorAll('.tree-item.file');
+    const navLinks = document.querySelectorAll('.nav-link');
     const contentDisplay = document.getElementById('content-display');
-    const lineNumbers = document.querySelector('.line-numbers');
-    const tabContainer = document.querySelector('.editor-tabs');
+    const sidebar = document.querySelector('.doc-sidebar');
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
 
-    // Folder toggle logic (Updated for multiple folders)
-    const folderHeaders = document.querySelectorAll('.tree-item.folder .item-row');
+    // Initial Load
+    loadPage('home.html');
 
-    folderHeaders.forEach(header => {
-        header.addEventListener('click', (e) => {
-            const folder = header.parentElement;
-            folder.classList.toggle('open');
+    // Navigation Click
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const fileName = link.getAttribute('data-file');
 
-            // Toggle icon
-            const icon = header.querySelector('i');
-            if (folder.classList.contains('open')) {
-                icon.classList.remove('fa-chevron-right');
-                icon.classList.add('fa-chevron-down');
-            } else {
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-right');
+            // UI Updates
+            navLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+
+            loadPage(fileName);
+
+            // Close mobile menu if open
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('show');
             }
         });
     });
 
-    // Initial Load
-    loadFile('home.html');
-    updateLineNumbers(fileContent['home.html']);
-
-    // File Click Handler
-    fileItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const fileName = item.getAttribute('data-file');
-
-            // UI Updates
-            document.querySelectorAll('.tree-item.file').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-
-            loadFile(fileName);
-        });
+    // Mobile Menu Toggle
+    mobileBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('show');
     });
 
-    function loadFile(fileName) {
-        // Update Content
+    function loadPage(fileName) {
         if (fileContent[fileName]) {
-            contentDisplay.innerHTML = `<pre><code>${fileContent[fileName]}</code></pre>`;
-            updateLineNumbers(fileContent[fileName]);
-
-            // Update Tabs
-            updateTabs(fileName);
-
-            // Update Status Bar
-            const ext = fileName.split('.').pop().toUpperCase();
-            const lang = document.querySelector('.status-right .status-item:nth-child(3)');
-            if (lang) lang.textContent = ext === 'JS' ? 'JAVASCRIPT' : ext;
+            // Render content (Simulated Markdown parsing for demonstration)
+            contentDisplay.innerHTML = parseContent(fileContent[fileName], fileName);
         }
     }
 
-    function updateLineNumbers(content) {
-        if (!content) return;
-        const lines = content.split('\n').length;
-        lineNumbers.innerHTML = '';
-        for (let i = 1; i <= lines; i++) {
-            const span = document.createElement('span');
-            span.textContent = i;
-            span.style.display = 'block';
-            lineNumbers.appendChild(span);
-        }
-    }
+    // Simple parser to make the raw content look like a documentation page
+    function parseContent(content, fileName) {
+        // Just wrapping code in tags for simple display
+        // ideally you would use a markdown library like marked.js here
 
-    function updateTabs(activeFileName) {
-        // Clear active state of existing tabs
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        let html = '';
 
-        // Check if tab exists
-        let existingTab = Array.from(document.querySelectorAll('.tab')).find(t => t.innerText.includes(activeFileName));
-
-        if (existingTab) {
-            existingTab.classList.add('active');
+        if (fileName.includes('.html')) {
+            // Strip HTML tags for display or render them? 
+            // For a doc site about code, usually we explain it.
+            // But here let's make it look like a nice page.
+            html = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+            // Very basic cleanup to render the stored HTML string as actual HTML
+        } else if (fileName.includes('.md')) {
+            // Basic MD to HTML
+            html = content
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
+                .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>')
+                .replace(/- (.*$)/gim, '<li>$1</li>')
+                .replace(/\n/g, '<br>');
         } else {
-            // Create new tab
-            const newTab = document.createElement('div');
-            newTab.className = 'tab active';
-            newTab.innerHTML = `
-                <i class="fab ${getIconClass(activeFileName)}"></i>
-                <span>${activeFileName}</span>
-                <i class="fas fa-times close-tab"></i>
-            `;
-
-            // Close tab handler
-            newTab.querySelector('.close-tab').addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent tab switching
-                newTab.remove();
-                // If closed active tab, switch to last one
-                if (newTab.classList.contains('active') && tabContainer.children.length > 0) {
-                    const lastTab = tabContainer.lastElementChild;
-                    // Extract filename from tab text (cleaner way would be data attribute)
-                    const filename = lastTab.querySelector('span').innerText;
-                    loadFile(filename);
-                }
-            });
-
-            // Click to switch
-            newTab.addEventListener('click', () => loadFile(activeFileName));
-
-            tabContainer.appendChild(newTab);
+            // Code block for JS/JSON/CSS
+            html = `<h2>${fileName}</h2><pre>${content}</pre>`;
         }
-    }
 
-    function getIconClass(fileName) {
-        if (fileName.includes('html')) return 'fa-html5 text-orange';
-        if (fileName.includes('css')) return 'fa-css3-alt text-blue';
-        if (fileName.includes('js')) return 'fa-js text-yellow';
-        if (fileName.includes('md')) return 'fa-markdown text-blue-light';
-        if (fileName.includes('json')) return 'fa-brackets-curly text-green';
-        return 'fa-file';
+        return html;
     }
 });
